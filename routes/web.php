@@ -1,8 +1,7 @@
 <?php
 
+use App\Http\Controllers\SimulationController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome');
-})->name('home');
+// Index (Simulation)
+Route::get('/', [SimulationController::class, 'index'])->name('home');
