@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -22,6 +23,7 @@ class Team extends Model
         'points',
         'goals_for',
         'goals_against',
+        'active',
     ];
 
     /**
@@ -38,7 +40,18 @@ class Team extends Model
             'points'        => 'integer',
             'goals_for'     => 'integer',
             'goals_against' => 'integer',
+            'active'        => 'boolean',
         ];
+    }
+
+    /**
+     * Summary of scopeActive
+     *
+     * @param  mixed  $query
+     */
+    public function scopeActive($query): Builder
+    {
+        return $query->where('active', true);
     }
 
     /**

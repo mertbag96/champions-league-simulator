@@ -29,8 +29,9 @@ class TeamSeeder extends Seeder
 
         for ($i = 0; $i < 4; $i++) {
             Team::create([
-                'name'  => $names[$i],
-                'power' => $powers[$i],
+                'name'      => $names[$i],
+                'power'     => $powers[$i],
+                'active'    => true,
             ]);
         }
     }

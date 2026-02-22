@@ -32,6 +32,9 @@ return new class extends Migration {
             // Goals Against
             $table->integer('goals_against')->default(0);
 
+            // Active
+            $table->boolean('active')->default(false);
+
             // Timestamps
             $table->timestamps();
         });

@@ -14,9 +14,19 @@ class SimulationController extends Controller
      */
     public function index(): Response
     {
+        $teams = Team::query()
+            ->orderBy('power', 'desc')
+            ->active()
+            ->get();
+
+        $readyForSimulation = $teams->count() > 3;
+
+        $fixturesGenerated = Fixture::exists();
+
         return Inertia::render('Home', [
-            'teams' => Team::all(),
-            'fixturesGenerated' => Fixture::exists(),
+            'teams' => $teams,
+            'readyForSimulation' => $readyForSimulation,
+            'fixturesGenerated' => $fixturesGenerated,
         ]);
     }
 }

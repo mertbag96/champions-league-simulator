@@ -1,36 +1,24 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { slugify } from '@/lib/utils';
-import { home } from '@/routes';
+import { getTeamLogoUrl } from '@/lib/teamLogo';
+import { index } from '@/routes/teams';
 import type { Team } from '@/types/team';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Champions League Simulator';
 
 const props = defineProps<{
   teams: Team[]
+  readyForSimulation: boolean
   fixturesGenerated: boolean
 }>()
-
-const teamImageModules = import.meta.glob<{ default: string }>(
-  '../../assets/images/teams/*.png',
-  { eager: true, query: '?url', import: 'default' }
-)
-
-const basePath = '../../assets/images/teams/';
-
-function teamLogoUrl(teamName: string): string | undefined {
-  const key = `${basePath}${slugify(teamName)}.png`
-  const mod = teamImageModules[key]
-  return mod != null ? (typeof mod === 'string' ? mod : (mod as { default: string }).default) : undefined
-}
 </script>
 
 <template>
     <AppLayout>
         <!-- Homepage -->
         <main class="w-[90%] xs:container mx-auto py-6 sm:py-12 flex flex-col justify-center items-center">
-            <div class="flex flex-col items-center space-y-6 md:space-y-8 max-w-xl">
+            <div class="w-full flex flex-col items-center space-y-6 md:space-y-8 max-w-2xl">
                 <!-- Title -->
                 <h1 class="font-semibold text-lg sm:text-2xl text-center">
                     Welcome to UEFA {{ appName }}
@@ -38,15 +26,16 @@ function teamLogoUrl(teamName: string): string | undefined {
 
                 <!-- Description -->
                 <p class="text-gray-300 text-sm sm:text-base text-center leading-relaxed">
-                    Build and simulate a 4-team group stage where match results are determined by team strength.
-                    Manage teams, generate fixtures, and simulate matches progressively or all at once.
+                    Simulate a 4-team group stage (minimum 4 teams) where match results are determined by team strength.
+                    Manage teams, generate fixtures, and simulate matches progressively or all at once. Only active teams
+                    can be used for simulation.
                 </p>
 
                 <!-- CTA Button -->
                 <Link
-                    v-if="props.teams.length < 4"
-                    :href="home.url()"
-                    class="inline-flex items-center justify-center px-5 py-2.5 rounded-sm bg-white text-blue-800 font-semibold text-sm hover:bg-gray-100 transition-colors duration-200"
+                    v-if="!props.readyForSimulation"
+                    :href="index.url()"
+                    class="p-2 rounded-sm border border-white bg-white text-blue-800 hover:bg-transparent hover:text-white font-semibold text-sm transition-all duration-200 cursor-pointer"
                 >
                     Manage teams to start simulating
                 </Link>
@@ -78,13 +67,13 @@ function teamLogoUrl(teamName: string): string | undefined {
                                     <td class="px-4 sm:px-6 py-3.5 text-sm font-medium text-white">
                                         <span class="flex items-center gap-2">
                                             <img
-                                                v-if="teamLogoUrl(team.name)"
-                                                :src="teamLogoUrl(team.name)"
+                                                :src="getTeamLogoUrl(team.name)"
                                                 :alt="team.name"
                                                 width="36"
                                                 height="36"
                                                 class="shrink-0 rounded object-cover"
                                                 loading="lazy"
+                                                @error="($event.target as HTMLImageElement).style.display = 'none'"
                                             >
                                             <span>{{ team.name }}</span>
                                         </span>
