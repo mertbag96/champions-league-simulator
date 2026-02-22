@@ -88,7 +88,7 @@ watchEffect(() => {
 
                     <!-- Body -->
                     <tbody
-                        v-if="props.teams.length > 1"
+                        v-if="props.teams.length > 0"
                         class="divide-y divide-blue-600/50 font-medium text-white"
                     >
                         <tr
