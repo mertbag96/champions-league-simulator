@@ -7,12 +7,12 @@ use App\Models\Fixture;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class SimulationController extends Controller
+class HomeController extends Controller
 {
     /**
-     * Show index page for simulation
+     * Show home page.
      */
-    public function index(): Response
+    public function __invoke(): Response
     {
         $fixturesGenerated = Fixture::exists();
 

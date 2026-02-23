@@ -28,10 +28,10 @@ return new class extends Migration {
             $table->unsignedInteger('week');
 
             // Home Score
-            $table->unsignedInteger('home_score')->nullable();
+            $table->unsignedInteger('home_score')->default(0);
 
             // Away Score
-            $table->unsignedInteger('away_score')->nullable();
+            $table->unsignedInteger('away_score')->default(0);
 
             // Played
             $table->boolean('played')->default(false);

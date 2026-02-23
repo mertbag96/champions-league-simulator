@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { usePage, Link } from '@inertiajs/vue3';
+import { watchEffect } from 'vue';
+import { useToast } from '@/composables/useToast';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { getTeamLogoUrl } from '@/lib/teamLogo';
+import { index as fixtures, store } from '@/routes/fixtures';
 import { index } from '@/routes/teams';
 import type { Team } from '@/types/team';
+
+const page = usePage();
+
+const toast = useToast();
 
 const appName = import.meta.env.VITE_APP_NAME || 'Champions League Simulator';
 
@@ -12,6 +19,19 @@ const props = defineProps<{
   readyForSimulation: boolean
   fixturesGenerated: boolean
 }>()
+
+watchEffect(() => {
+  const success = page.props.flash?.success;
+  const error = page.props.flash?.error;
+
+  if (success) {
+    toast.success(success);
+  }
+
+  if (error) {
+    toast.error(error);
+  }
+})
 </script>
 
 <template>
@@ -31,7 +51,7 @@ const props = defineProps<{
                     can be used for simulation.
                 </p>
 
-                <!-- CTA Button -->
+                <!-- Manage Teams Button -->
                 <Link
                     v-if="!props.readyForSimulation"
                     :href="index.url()"
@@ -84,12 +104,25 @@ const props = defineProps<{
                         </table>
                     </div>
 
-                    <!-- CTA Button -->
-                    <button
+                    <!-- See Fixtures -->
+                    <Link
+                        v-if="fixturesGenerated"
+                        :href="fixtures.url()"
+                        class="p-2 rounded-sm border border-white bg-white text-blue-800 hover:bg-transparent hover:text-white font-semibold text-sm text-center transition-all duration-200 cursor-pointer"
+                    >
+                        See Fixtures
+                    </Link>
+
+                    <!-- Generate Fixtures Button -->
+                    <Link
+                        v-else
+                        :href="store.url()"
+                        method="post"
+                        as="button"
                         class="p-2 rounded-sm border border-white bg-white text-blue-800 hover:bg-transparent hover:text-white font-semibold text-sm transition-all duration-200 cursor-pointer"
                     >
                         Generate Fixtures
-                    </button>
+                    </Link>
                 </div>
             </div>
         </main>

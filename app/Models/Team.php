@@ -45,13 +45,42 @@ class Team extends Model
     }
 
     /**
-     * Summary of scopeActive
+     * Get the active teams.
      *
      * @param  mixed  $query
      */
     public function scopeActive($query): Builder
     {
         return $query->where('active', true);
+    }
+
+    /**
+     * Get the teams with fixtures.
+     */
+    public function scopeWithFixtures($query): Builder
+    {
+        return $query->whereHas('fixtures');
+    }
+
+    /**
+     * Does team have any fixtures?
+     */
+    public function hasFixtures(): bool
+    {
+        return Fixture::query()
+            ->where('home_team_id', $this->id)
+            ->orWhere('away_team_id', $this->id)
+            ->exists();
+    }
+
+    /**
+     * Get the fixtures of the team.
+     */
+    public function fixtures(): HasMany
+    {
+        return $this
+            ->hasMany(Fixture::class, 'home_team_id')
+            ->orWhere('away_team_id', $this->id);
     }
 
     /**

@@ -1,5 +1,9 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
+    faHome,
+    faFutbol,
+    faRotate,
+    faCirclePlay,
     faCirclePlus,
     faCircleLeft,
     faCircleCheck,
@@ -7,6 +11,9 @@ import {
     faPenToSquare,
     faTrashCan,
     faCircleQuestion,
+    faPeopleGroup,
+    faCalendarDays,
+    faPlaneDeparture,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { createInertiaApp } from '@inertiajs/vue3';
@@ -20,13 +27,20 @@ import '../css/app.css';
 const appName = import.meta.env.VITE_APP_NAME || 'Champions League Simulator';
 
 library.add(
+    faHome,
+    faFutbol,
+    faRotate,
+    faCirclePlay,
     faCirclePlus,
     faCircleLeft,
     faCircleCheck,
     faCircleXmark,
     faPenToSquare,
     faTrashCan,
-    faCircleQuestion
+    faCircleQuestion,
+    faPeopleGroup,
+    faCalendarDays,
+    faPlaneDeparture
 );
 
 createInertiaApp({

@@ -113,7 +113,7 @@ const toggleInformationModal = () => {
             <div class="bg-blue-900/50 px-4 md:px-6 py-2.5 md:py-4 space-y-4">
                 <p>Currently, only a few teams have logos in the app. The teams that have logos are listed below. This information can be useful when creating or editing teams.</p>
 
-                <p class="text-gray-400 italic">In order to correctly display logos, please name your teams exactly as shown below.</p>
+                <p class="text-gray-400 italic">In order to display logos correctly, please name your teams exactly as shown below.</p>
 
                 <div class="pt-4 border-t border-t-blue-900 grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div

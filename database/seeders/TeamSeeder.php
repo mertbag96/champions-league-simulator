@@ -16,16 +16,16 @@ class TeamSeeder extends Seeder
          * @var list<string>
          */
         $names = [
+            'Bayern Munchen',
+            'Real Madrid',
+            'PSG',
             'Arsenal',
-            'Manchester City',
-            'Chelsea',
-            'Liverpool',
         ];
 
         /**
          * @var list<int>
          */
-        $powers = [96, 94, 88, 80];
+        $powers = [95, 98, 97, 93];
 
         for ($i = 0; $i < 4; $i++) {
             Team::create([

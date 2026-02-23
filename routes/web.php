@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\TeamController;
-use App\Http\Controllers\SimulationController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 // Home Page
-Route::get('/', [SimulationController::class, 'index'])->name('home');
+Route::get('/', HomeController::class)->name('home');
 
-// Teams Resource
-Route::resource('teams', TeamController::class)->except('show');
+require __DIR__ . '/team.php';
+require __DIR__ . '/fixture.php';
+require __DIR__ . '/simulation.php';

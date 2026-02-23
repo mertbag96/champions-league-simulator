@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -39,6 +40,66 @@ class Fixture extends Model
             'away_score'    => 'integer',
             'played'        => 'boolean',
         ];
+    }
+
+    /**
+     * Get fixtures / matches for the given week.
+     */
+    public function scopeByWeek($query, int $week): Builder
+    {
+        return $query->where('week', $week);
+    }
+
+    /**
+     * Get played matches.
+     */
+    public function scopePlayed($query): Builder
+    {
+        return $query->where('played', true);
+    }
+
+    /**
+     * Get unplayed matches.
+     */
+    public function scopeUnplayed($query): Builder
+    {
+        return $query->where('played', false);
+    }
+
+    /**
+     * Is the match draw?
+     */
+    public function isDraw(): bool
+    {
+        if (! $this->played) {
+            return false;
+        }
+
+        return $this->home_score === $this->away_score;
+    }
+
+    /**
+     * Did home team win the match?
+     */
+    public function homeWon(): bool
+    {
+        if (! $this->played) {
+            return false;
+        }
+
+        return $this->home_score > $this->away_score;
+    }
+
+    /**
+     * Did away team win the match?
+     */
+    public function awayWon(): bool
+    {
+        if (! $this->played) {
+            return false;
+        }
+
+        return $this->away_score > $this->home_score;
     }
 
     /**

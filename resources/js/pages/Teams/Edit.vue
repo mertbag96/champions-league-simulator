@@ -26,9 +26,14 @@ const submit = () => {
 
 watchEffect(() => {
   const success = page.props.flash?.success;
+  const error = page.props.flash?.error;
 
   if (success) {
     toast.success(success);
+  }
+
+  if (error) {
+    toast.error(error);
   }
 })
 </script>
