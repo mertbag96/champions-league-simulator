@@ -46,7 +46,7 @@ watchEffect(() => {
 
                 <!-- Description -->
                 <p class="text-gray-300 text-sm sm:text-base text-center leading-relaxed">
-                    Simulate a 4-team group stage (minimum 4 teams) where match results are determined by team strength.
+                    Simulate a 4-team group stage (minimum 2 teams) where match results are determined by team strength.
                     Manage teams, generate fixtures, and simulate matches progressively or all at once. Only active teams
                     can be used for simulation.
                 </p>

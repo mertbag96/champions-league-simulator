@@ -19,8 +19,8 @@ class FixtureService
             ->active()
             ->get();
 
-        if ($teams->count() < 4) {
-            throw new \Exception('At least 4 active teams are required to generate fixtures.');
+        if ($teams->count() < 2) {
+            throw new \Exception('At least 2 active teams are required to generate fixtures!');
         }
 
         $singleFixtures = $this->generateSingleRoundRobin($teams);

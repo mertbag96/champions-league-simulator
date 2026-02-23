@@ -26,7 +26,7 @@ class HomeController extends Controller
 
         $teams = $query->get();
 
-        $readyForSimulation = $teams->count() > 3;
+        $readyForSimulation = $teams->count() > 1;
 
         return Inertia::render('Home', [
             'teams' => $teams,

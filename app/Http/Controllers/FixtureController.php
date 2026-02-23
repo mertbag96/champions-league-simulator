@@ -61,15 +61,14 @@ class FixtureController extends Controller
 
         } catch (\Exception $exception) {
 
-            $errorMessage = 'An error occured while generating fixtures!';
-
-            Log::error($errorMessage, [
+            Log::error('An error occured while generating fixtures!', [
                 'exception' => $exception,
             ]);
 
             return redirect()
                 ->back()
-                ->with('error', $errorMessage);
+                ->with('error', $exception->getMessage());
+
         }
     }
 
@@ -111,7 +110,7 @@ class FixtureController extends Controller
                 'played'        => 0,
                 'points'        => 0,
                 'goals_for'     => 0,
-                'goals_against' => 0
+                'goals_against' => 0,
             ]);
         }
 
