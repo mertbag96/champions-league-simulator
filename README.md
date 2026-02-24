@@ -65,11 +65,14 @@ Follow these steps to run the project locally:
 
    ```bash
    npm run build
-   # or for local development:
-   # npm run dev
+   
+   or for local development:
+
+   npm run dev
    ```
 
 8. **Serve the application**
+
    If you are using Laravel Herd, the site will be available at your `.test` domain.  
 
 ## Screenshots
