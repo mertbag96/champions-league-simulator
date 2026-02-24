@@ -36,3 +36,8 @@ export type TeamForTable = {
     active: boolean;
     next_opponent: string;
 };
+
+export type TeamPrediction = {
+    name: string;
+    percentage: number;
+}

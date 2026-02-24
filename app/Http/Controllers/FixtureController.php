@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Fixture;
 use App\Models\Team;
 use App\Services\FixtureService;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -76,6 +77,8 @@ class FixtureController extends Controller
      */
     public function reset(): RedirectResponse
     {
+        Cache::flush();
+
         Fixture::truncate();
 
         $teams = Team::all();

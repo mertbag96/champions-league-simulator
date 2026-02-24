@@ -7,7 +7,7 @@ import { getTeamLogoUrl } from '@/lib/teamLogo';
 import { index as fixturesIndex } from '@/routes/fixtures';
 import { index, simulate, reset } from '@/routes/simulation';
 import type { FixtureWithTeams } from '@/types/fixture';
-import type { TeamForTable } from '@/types/team';
+import type { TeamForTable, TeamPrediction } from '@/types/team';
 
 const page = usePage();
 
@@ -17,10 +17,13 @@ const props = defineProps<{
   week: number,
   weeks: number[],
   teams: TeamForTable[],
-  matches: FixtureWithTeams[]
+  matches: FixtureWithTeams[],
+  predictions: TeamPrediction[],
 }>()
 
 const showHint = ref(false);
+
+const showPredictions = ref(false);
 
 const selectedWeek = ref(props.week);
 
@@ -32,6 +35,10 @@ const autoPlayDelay = 1000;
 
 const toggleHint = () => {
     showHint.value = ! showHint.value;
+};
+
+const togglePredictions = () => {
+    showPredictions.value = ! showPredictions.value;
 };
 
 const autoPlay = async () => {
@@ -72,7 +79,7 @@ watch(selectedWeek, (week) => {
         preserveState: true,
         preserveScroll: true,
         replace: true,
-    })
+    });
 });
 
 watchEffect(() => {
@@ -108,20 +115,31 @@ watchEffect(() => {
                             />
                         </h1>
 
-                        <!-- Week Selection -->
-                        <select
-                            v-model="selectedWeek"
-                            class="px-6 py-3 bg-white rounded-lg font-semibold text-xs sm:text-sm md:text-md text-blue-800"
-                            :disabled="isAutoPlaying"
-                        >
-                            <option
-                                v-for="currentWeek in props.weeks"
-                                :key="currentWeek"
-                                :value="currentWeek"
+                        <!-- Sub Navigation -->
+                        <div class="flex items-center space-x-2">
+                            <!-- Show Predictions -->
+                            <button
+                                v-if="Object.keys(props.predictions).length > 0"
+                                @click="togglePredictions"
+                                class="px-4 py-3 bg-sky-500 rounded-lg font-semibold text-xs sm:text-sm md:text-md text-white cursor-pointer"
                             >
-                                Week {{ currentWeek }}
-                            </option>
-                        </select>
+                                Predictions
+                            </button>
+
+                            <!-- Week Selection -->
+                            <select
+                                v-model="selectedWeek"
+                                class="px-6 py-3 bg-white rounded-lg font-semibold text-xs sm:text-sm md:text-md text-blue-800"
+                            >
+                                <option
+                                    v-for="currentWeek in props.weeks"
+                                    :key="currentWeek"
+                                    :value="currentWeek"
+                                >
+                                    Week {{ currentWeek }}
+                                </option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Actions -->
@@ -351,10 +369,72 @@ watchEffect(() => {
                     - You can simulate all weeks automatically. <br>
                     - You can simulate week by week by selecting each week from the dropdown. <br>
                     - You can go back to fixtures to see all matches at once. <br>
-                    - You can delete all the simulation data by clicking "Reset Simulation" button.<br><br>
+                    - You can delete all the simulation data by clicking "Reset Simulation" button. <br>
+                    - You can check the predictions after 4th week by clicking the "Predictions" button. <br><br>
                     Hope you enjoy it
                     <font-awesome-icon icon="fa-solid fa-smile" />
                 </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Predictions -->
+    <div
+        v-if="showPredictions"
+        @click.self="togglePredictions"
+        class="fixed inset-0 bg-blue-950/50 flex items-center justify-center z-50 backdrop-blur-xs p-4"
+    >
+        <div class="overflow-auto bg-blue-950 border border-blue-700/50 rounded-lg shadow-lg max-w-4xl w-full text-xs sm:text-sm md:text-md text-white">
+            <!-- Header -->
+            <div class="px-4 md:px-6 py-2.5 md:py-4 border-b border-blue-700/50 flex justify-between items-center">
+                <h3 class="font-semibold">Predictions for Week {{ props.week }}</h3>
+
+                <button
+                    @click="togglePredictions"
+                    lass="text-lg cursor-pointer text-white"
+                >
+                    <font-awesome-icon icon="fa-solid fa-circle-xmark" />
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="bg-blue-900/50 p-4 md:p-8 space-y-4">
+                <!-- Table Container -->
+                <div class="overflow-auto w-full rounded-lg border border-blue-800/75 bg-blue-800/25 shadow-xl backdrop-blur-sm">
+                    <!-- Table -->
+                    <table class="w-full border-collapse text-left overflow-auto">
+                        <!-- Head -->
+                        <thead class="font-semibold text-gray-200">
+                            <tr class="border-b border-blue-800 bg-blue-800">
+                                <th class="min-w-[240px] px-4 sm:px-6 py-4 text-sm">Team</th>
+                                <th class="min-w-[50px] px-4 sm:px-6 py-4 text-sm">%</th>
+                            </tr>
+                        </thead>
+
+                        <!-- Body -->
+                        <tbody class="divide-y divide-blue-600/50 font-medium text-white">
+                            <tr
+                                v-for="(team, id) in props.predictions"
+                                :key="id"
+                                class="bg-gray-800/20 hover:bg-blue-900/20 transition-colors duration-150"
+                            >
+                                <td class="px-4 sm:px-6 py-3.5 text-sm flex items-center">
+                                    <img
+                                        :src="getTeamLogoUrl(team.name)"
+                                        :alt="team.name"
+                                        width="36"
+                                        height="36"
+                                        class="shrink-0 rounded object-cover"
+                                        loading="lazy"
+                                        @error="($event.target as HTMLImageElement).style.display = 'none'"
+                                    >
+                                    {{ team.name }}
+                                </td>
+                                <td class="px-4 sm:px-6 py-3.5 text-sm">{{ team.percentage }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

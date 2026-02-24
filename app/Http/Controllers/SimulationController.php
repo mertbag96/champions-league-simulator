@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Fixture;
 use App\Models\Team;
+use App\Services\PredictionService;
 use App\Services\SimulationService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -14,7 +16,10 @@ class SimulationController extends Controller
     /**
      * The constructor of the controller.
      */
-    public function __construct(protected SimulationService $simulationService) {}
+    public function __construct(
+        protected SimulationService $simulationService,
+        protected PredictionService $predictionService,
+    ) {}
 
     /**
      * Show the first week of the simulation.
@@ -67,11 +72,14 @@ class SimulationController extends Controller
             return redirect()->route('fixtures.index');
         }
 
+        $predictions = Cache::get("simulation.predictions.week.$week", []);
+
         return Inertia::render('Simulation/Index', [
             'week' => $week,
             'weeks' => $weeks,
             'teams' => $teams,
             'matches' => $matches,
+            'predictions' => $predictions,
         ]);
     }
 
@@ -96,6 +104,19 @@ class SimulationController extends Controller
                 ->with('error', 'No unplayed matches found to simulate this week!');
         }
 
+        $maxWeek = Fixture::query()
+            ->max('week') ?? 0;
+
+        $currentWeek = Fixture::query()
+            ->played()
+            ->max('week') ?? 0;
+
+        if ($currentWeek >= 4 && $currentWeek < $maxWeek) {
+            $predictions = $this->predictionService->calculatePredictions();
+
+            Cache::put("simulation.predictions.week.$currentWeek", $predictions, now()->addDays(30));
+        }
+
         $nextWeek = Fixture::query()
             ->where('week', '>', $week)
             ->distinct()
@@ -118,6 +139,8 @@ class SimulationController extends Controller
      */
     public function reset(): RedirectResponse
     {
+        Cache::flush();
+
         $teams = Team::query()
             ->withFixtures()
             ->active()
