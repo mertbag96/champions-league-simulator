@@ -38,6 +38,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static Builder<static>|Fixture wherePlayed($value)
  * @method static Builder<static>|Fixture whereUpdatedAt($value)
  * @method static Builder<static>|Fixture whereWeek($value)
+ * @method static \Database\Factories\FixtureFactory factory($count = null, $state = [])
  *
  * @mixin \Eloquent
  */

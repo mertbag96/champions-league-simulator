@@ -40,6 +40,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static Builder<static>|Team wherePower($value)
  * @method static Builder<static>|Team whereUpdatedAt($value)
  * @method static Builder<static>|Team withFixtures()
+ * @method static \Database\Factories\TeamFactory factory($count = null, $state = [])
  *
  * @mixin \Eloquent
  */
