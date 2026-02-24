@@ -1,8 +1,12 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
     faHome,
+    faPlay,
+    faSmile,
     faFutbol,
     faRotate,
+    faForward,
+    faCircleInfo,
     faCirclePlay,
     faCirclePlus,
     faCircleLeft,
@@ -28,8 +32,12 @@ const appName = import.meta.env.VITE_APP_NAME || 'Champions League Simulator';
 
 library.add(
     faHome,
+    faPlay,
+    faSmile,
     faFutbol,
     faRotate,
+    faForward,
+    faCircleInfo,
     faCirclePlay,
     faCirclePlus,
     faCircleLeft,

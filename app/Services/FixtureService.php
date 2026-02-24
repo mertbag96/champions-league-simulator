@@ -23,7 +23,9 @@ class FixtureService
             throw new \Exception('At least 2 active teams are required to generate fixtures!');
         }
 
-        $singleFixtures = $this->generateSingleRoundRobin($teams);
+        $shuffledTeams = $teams->shuffle();
+
+        $singleFixtures = $this->generateSingleRoundRobin($shuffledTeams);
         $reverseFixtures = $singleFixtures->map(function ($week) {
             return $week->map(fn($match) => [
                 'home' => $match['away'],
@@ -32,6 +34,8 @@ class FixtureService
         });
 
         $allFixtures = $singleFixtures->concat($reverseFixtures);
+
+        $allFixtures = $allFixtures->shuffle();
 
         $week = 1;
         foreach ($allFixtures as $weekFixtures) {

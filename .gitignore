@@ -27,3 +27,4 @@ yarn-error.log
 /.zed
 /.cursor
 .DS_STORE
+_ide_helper.php

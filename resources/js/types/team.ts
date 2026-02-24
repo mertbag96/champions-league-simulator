@@ -20,3 +20,19 @@ export type TeamEditForm = {
     power: number | string | null;
     active: boolean | null;
 };
+
+export type TeamForTable = {
+    id: number;
+    name: string;
+    power: number;
+    played?: number;
+    wins?: number;
+    draws?: number;
+    losses?: number;
+    points?: number;
+    goals_for?: number;
+    goals_against?: number;
+    goal_difference?: number;
+    active: boolean;
+    next_opponent: string;
+};

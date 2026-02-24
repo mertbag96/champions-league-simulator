@@ -5,6 +5,7 @@ import { useToast } from '@/composables/useToast';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { getTeamLogoUrl } from '@/lib/teamLogo';
 import { store, reset } from '@/routes/fixtures';
+import { index } from '@/routes/simulation';
 
 const page = usePage();
 
@@ -58,7 +59,7 @@ watchEffect(() => {
                     <div class="w-full flex flex-wrap justify-between gap-4 mt-2 md:mt-0 font-semibold transition-all duration-200 text-center">
                         <!-- Start Simulation -->
                         <Link
-                            href="/"
+                            :href="index.url(1)"
                             class="w-full md:w-auto p-2 md:p-4 rounded-sm border border-white bg-white text-blue-800 hover:bg-transparent hover:text-white cursor-pointer"
                         >
                             <font-awesome-icon icon="fa-solid fa-circle-play" />
@@ -72,8 +73,8 @@ watchEffect(() => {
                             as="button"
                             class="w-full md:w-auto p-2 md:p-4 rounded-sm border border-red-800 bg-red-700 text-white hover:bg-red-600 cursor-pointer"
                         >
-                            <font-awesome-icon icon="fa-solid fa-rotate" />
-                            Reset Simulation
+                            <font-awesome-icon icon="fa-solid fa-trash-can" />
+                            Delete Fixtures
                         </Link>
                     </div>
                 </div>
@@ -126,7 +127,7 @@ watchEffect(() => {
                                 <!-- Match Details -->
                                 <div class="text-center px-4">
                                     <!-- Score -->
-                                    <div class="text-xl font-bold">
+                                    <div class="text-sm sm:txt-md lg:text-xl font-bold">
                                         {{ fixture.played ? `${fixture.home_score} - ${fixture.away_score}` : '-' }}
                                     </div>
 

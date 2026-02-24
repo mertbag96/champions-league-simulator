@@ -7,6 +7,40 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @property int $id
+ * @property int $home_team_id
+ * @property int $away_team_id
+ * @property int $week
+ * @property int $home_score
+ * @property int $away_score
+ * @property bool $played
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property-read \App\Models\Team $awayTeam
+ * @property-read \App\Models\Team $homeTeam
+ *
+ * @method static Builder<static>|Fixture awayWon()
+ * @method static Builder<static>|Fixture byWeek(int $week)
+ * @method static Builder<static>|Fixture draws()
+ * @method static Builder<static>|Fixture homeWon()
+ * @method static Builder<static>|Fixture newModelQuery()
+ * @method static Builder<static>|Fixture newQuery()
+ * @method static Builder<static>|Fixture played()
+ * @method static Builder<static>|Fixture query()
+ * @method static Builder<static>|Fixture unplayed()
+ * @method static Builder<static>|Fixture whereAwayScore($value)
+ * @method static Builder<static>|Fixture whereAwayTeamId($value)
+ * @method static Builder<static>|Fixture whereCreatedAt($value)
+ * @method static Builder<static>|Fixture whereHomeScore($value)
+ * @method static Builder<static>|Fixture whereHomeTeamId($value)
+ * @method static Builder<static>|Fixture whereId($value)
+ * @method static Builder<static>|Fixture wherePlayed($value)
+ * @method static Builder<static>|Fixture whereUpdatedAt($value)
+ * @method static Builder<static>|Fixture whereWeek($value)
+ *
+ * @mixin \Eloquent
+ */
 class Fixture extends Model
 {
     use HasFactory;
@@ -64,6 +98,30 @@ class Fixture extends Model
     public function scopeUnplayed($query): Builder
     {
         return $query->where('played', false);
+    }
+
+    /**
+     * Get the matches where home team won.
+     */
+    public function scopeHomeWon($query): Builder
+    {
+        return $query->whereColumn('home_score', '>', 'away_score');
+    }
+
+    /**
+     * Get the matches where away team won.
+     */
+    public function scopeAwayWon($query): Builder
+    {
+        return $query->whereColumn('away_score', '>', 'home_score');
+    }
+
+    /**
+     * Get the draw matches.
+     */
+    public function scopeDraws($query): Builder
+    {
+        return $query->whereColumn('home_score', 'away_score');
     }
 
     /**
